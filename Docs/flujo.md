@@ -1,4 +1,6 @@
 Flujo del Sistema
+
+<img src="images/Diagrama_De_Flujo.webp">
 Descripción General
 
 El sistema se divide en dos flujos principales:
