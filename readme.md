@@ -1,4 +1,4 @@
-Recuperación de Cédulas Perdidas
+Recuperación de Cédulas 
 Problema
 
 En Uruguay, perder la cédula de identidad es una situación frecuente que genera múltiples inconvenientes: trámites detenidos, riesgo de uso indebido de datos personales y dificultades para que el documento regrese a su dueño.
