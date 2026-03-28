@@ -1,8 +1,12 @@
 Arquitectura del Sistema
 
+
 El sistema se basa en una arquitectura MVC (Modelo - Vista - Controlador), lo que permite organizar el código de forma clara, escalable y mantenible a medida que el proyecto crece.
 
 Estructura General
+
+
+<img src="images/MVC.png" width="500px">
 
 La aplicación se divide en tres componentes principales:
 

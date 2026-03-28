@@ -1,4 +1,6 @@
 Recuperación de Cédulas 
+
+<img src="images/apareCIó_logo.jpeg" width="700px">
 Problema
 
 En Uruguay, perder la cédula de identidad es una situación frecuente que genera múltiples inconvenientes: trámites detenidos, riesgo de uso indebido de datos personales y dificultades para que el documento regrese a su dueño.
@@ -41,7 +43,9 @@ Script para difuminar automáticamente imágenes subidas
 Sistema de comparación de datos mediante hash
 API REST para comunicación cliente-servidor (futuro)
 
-b
+
+
+
 MVP (Producto Mínimo Viable)
 
 El MVP incluirá:
