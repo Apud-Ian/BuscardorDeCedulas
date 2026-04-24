@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>ApareCIó | Recupera tu identidad</title>
+    <meta property="og:title" content="ApareCIó | Recupera tu Cédula Uruguaya">
+    <meta property="og:description" content="La red solidaria y confidencial para encontrar y devolver documentos de identidad extraviados en Uruguay.">
+    <meta property="og:image" content="https://tu-dominio.com/BAnderaUruguayafull.png"> 
+    <meta property="og:type" content="website">
+    
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        html { scroll-behavior: smooth; }
+
+        :root {
+            --azul-oscuro: #001f3f; 
+            --azul-claro: #E6F0FA;
+            --celeste-cielo: #7AB4D8;
+            --blanco: #FFFFFF;
+            --texto-gris: #4B5563;
+            --sombra: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F8FAFC;
+            color: #001f3f;
+            overflow-x: hidden;
+            font-size: 16px; 
+        }
+
+        /* 1. NAVBAR (MENÚ) */
+        nav {
+            background-color: #001f3f; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 5%;
+            gap: 1rem;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logos {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--blanco);
+            font-weight: 800;
+            font-size: 1.1rem;
+            text-align: center;
+            gap: 0.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-links a {
+            color: var(--blanco);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: var(--blanco);
+            border: 2px solid var(--blanco);
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-login:hover {
+            background: var(--blanco);
+            color: #001f3f;
+        }
+
+        /* 2. HERO (PORTADA DE LA BANDERA) */
+        .hero {
+            background: linear-gradient(rgba(122, 180, 216, 0.5), rgba(0, 31, 63, 0.6)), url('BAnderaUruguayafull.png');
+            background-color: var(--celeste-cielo);
+            background-size: cover;
+            background-position: center;
+            padding: 4rem 5%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--blanco);
+        }
+
+        .hero-content { max-width: 100%; }
+
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem; }
+        .hero p { font-size: 1rem; line-height: 1.5; margin-bottom: 2rem; opacity: 0.9; }
+
+        .btn-cta {
+            background-color: var(--blanco);
+            color: #001f3f;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            font-size: 1rem;
+            font-weight: 800;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 300px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+        /* 3. CARACTERÍSTICAS (TARJETAS) */
+        .features {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 2rem 5%;
+            background-color: #F8FAFC;
+        }
+
+        .feature-card {
+            background: var(--blanco);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--sombra);
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .feature-icon { width: 35px; height: 35px; fill: #001f3f; margin-bottom: 0.8rem; }
+        .feature-card h3 { margin: 0 0 0.4rem 0; font-size: 1.1rem; }
+        .feature-card p { margin: 0; font-size: 0.85rem; color: var(--texto-gris); line-height: 1.4; }
+
+        /* 4. ACORDEÓN DE SEGURIDAD */
+        .contenedor-seguridad {
+            width: 90%;
+            max-width: 800px;
+            margin: 3rem auto 1rem auto; /* Márgenes corregidos */
+            background: var(--blanco);
+            border-radius: 12px;
+            box-shadow: var(--sombra);
+            overflow: hidden;
+            position: relative;
+            z-index: 5;
+        }
+
+        .seguridad-titulo {
+            background-color: var(--azul-claro);
+            color: var(--azul-oscuro);
+            padding: 1rem 1.5rem;
+            margin: 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid rgba(0, 31, 63, 0.05);
+        }
+
+        .acordeon-item { border-bottom: 1px solid #E5E7EB; }
+        .acordeon-item:last-child { border-bottom: none; }
+
+        .acordeon-btn {
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            padding: 1.2rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--texto-gris);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s, color 0.3s;
+            font-family: inherit;
+        }
+
+        .acordeon-btn:hover { background-color: #F9FAFB; color: var(--azul-oscuro); }
+
+        .acordeon-btn::after {
+            content: '+';
+            font-size: 1.5rem;
+            font-weight: 400;
+            transition: transform 0.3s ease;
+        }
+
+        .acordeon-item.activo .acordeon-btn { color: #FF8C42; }
+        .acordeon-item.activo .acordeon-btn::after { transform: rotate(45deg); color: #FF8C42; }
+
+        .acordeon-contenido {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            background-color: var(--blanco);
+        }
+
+        .acordeon-texto {
+            padding: 0 1.5rem 1.2rem 1.5rem;
+            font-size: 0.95rem;
+            color: #6B7280;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* 5. MOTOR DE BÚSQUEDA */
+        .zona-app {
+            padding: 3rem 5%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .zona-app h2.titulo-seccion { font-size: 1.8rem; margin-bottom: 1.5rem; text-align: center; }
+
+        .contenedor-tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 1rem;
+        }
+        
+        .tab {
+            padding: 0.8rem;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1rem;
+            background-color: #E5E7EB;
+            color: #6B7280;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover { background-color: #D1D5DB; }
+        .tab.activa { background-color: var(--azul-claro); color: #001f3f; border-color: #001f3f; }
+
+        .contenedor-formularios {
+            display: grid;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .tarjeta-form {
+            grid-area: 1 / 1;
+            background-color: var(--blanco);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--sombra);
+            box-sizing: border-box;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            pointer-events: none;
+            transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+        }
+
+        .tarjeta-form.activa { opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto; z-index: 2; }
+
+        label { display: block; font-weight: 600; margin-bottom: 0.4rem; font-size: 0.85rem; color: #4B5563; }
+        
+        input {
+            width: 100%;
+            padding: 0.7rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid #D1D5DB;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        input:focus { outline: none; border-color: #001f3f; box-shadow: 0 0 0 3px rgba(0, 31, 63, 0.15); }
+
+        .btn-submit {
+            width: 100%;
+            padding: 0.9rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            background-color: #001f3f;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-submit:hover { background-color: #001122; }
+
+        #consola-resultados {
+            width: 100%;
+            max-width: 500px;
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+            box-sizing: border-box;
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        #consola-resultados.mostrar { display: block; opacity: 1; }
+
+        /* 6. FOOTER */
+        footer {
+            background-color: #001122;
+            color: var(--blanco);
+            text-align: center;
+            padding: 3rem 5% 2rem;
+            margin-top: 4rem;
+        }
+        .contacto-info { margin-bottom: 2rem; }
+        .contacto-info h3 { color: #FF8C42; margin-bottom: 0.5rem; }
+        .contacto-info p { font-size: 1rem; opacity: 0.9; }
+        
+        .btn-correo {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.8rem 1.5rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s;
+        }
+        .btn-correo:hover { background-color: white; color: #001f3f; }
+        .footer-legal { border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 1.5rem; font-size: 0.85rem; opacity: 0.7; }
+
+        /* SCROLL REVEAL */
+        .revelar { opacity: 0; transform: translateY(40px); transition: all 0.8s ease-out; }
+        .revelar.activo { opacity: 1; transform: translateY(0); }
+
+        /* AJUSTES PARA PANTALLAS GRANDES */
+        @media (min-width: 992px) {
+            nav {
+                position: absolute;
+                top: 0;
+                flex-direction: row; 
+                justify-content: space-between;
+                background-color: transparent; 
+                padding: 1.5rem 5%;
+            }
+            .logos { flex-direction: row; font-size: 1.2rem; }
+            .logos::after { content: "|"; font-weight: 300; margin: 0 10px; color: rgba(255,255,255,0.5); }
+            .nav-links { gap: 2rem; }
+            .nav-links a { font-size: 0.95rem; }
+            .btn-login { font-size: 0.9rem; padding: 0.5rem 1.5rem; }
+
+            .hero { min-height: 90vh; justify-content: flex-start; text-align: left; padding: 0 5%; }
+            .hero-content { max-width: 650px; margin-top: -6rem; }
+            .hero h1 { font-size: 3.8rem; }
+            .hero p { font-size: 1.15rem; }
+            .btn-cta { width: auto; font-size: 1.1rem; }
+
+            .features { flex-direction: row; gap: 2rem; margin-top: -5rem; background-color: transparent; padding: 0 5%; }
+            .feature-card { max-width: 320px; padding: 2rem; }
+            
+            .zona-app { padding: 8rem 5% 5rem; }
+            .zona-app h2.titulo-seccion { font-size: 2.2rem; }
+            .contenedor-tabs { flex-direction: row; gap: 1rem; max-width: 600px; }
+            .contenedor-formularios { max-width: 600px; }
+            .tarjeta-form { padding: 2.5rem; }
+            #consola-resultados { max-width: 600px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logos">
+            <span>ApareCIó</span>
+            <span style="font-weight: 400; font-size: 0.9rem;">FACULTAD DE INGENIERÍA UDELAR</span>
+        </div>
+        <div class="nav-links">
+            <a href="#" onclick="irAlMotor('encontre')">Publicar</a>
+            <a href="#" onclick="irAlMotor('perdio')">Buscar</a>
+            <a href="#contacto">Contacto</a> 
+        </div>
+        <button class="btn-login">Iniciar sesión</button>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Recupera tu identidad, ayuda a otros con ApareCIó</h1>
+            <p>Busca o publica cédulas de identidad extraviadas de forma segura y confidencial en todo el territorio uruguayo.</p>
+            <button class="btn-cta" onclick="irAlMotor('perdio')">Buscar mi Cédula</button>
+        </div>
+    </section>
+
+    <section class="features revelar">
+        <div class="feature-card">
+            <svg class="feature-icon" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
+            <h3>Búsqueda Confidencial</h3>
+            <p>Tus datos privados están protegidos. Solo se requiere información personal conocida para la búsqueda.</p>
+        </div>
+        <div class="feature-card">
+            <svg class="feature-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            <h3>Cobertura Nacional</h3>
+            <p>Conectamos todo el territorio para que encuentres tu cédula, sin importar dónde se perdió.</p>
+        </div>
+        <div class="feature-card">
+            <svg class="feature-icon" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            <h3>Comunidad Solidaria</h3>
+            <p>Participa reportando documentos encontrados y ayuda a que vuelvan a sus dueños.</p>
+        </div>
+    </section>
+
+    <div class="contenedor-seguridad revelar">
+        <h3 class="seguridad-titulo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            Centro de Información y Seguridad
+        </h3>
+        
+        <div class="acordeon-item">
+            <button class="acordeon-btn">Riesgos de perder la Cédula</button>
+            <div class="acordeon-contenido">
+                <p class="acordeon-texto">Al perder tu documento en el país, te expones a riesgos de suplantación de identidad. Personas malintencionadas podrían utilizarlo para solicitar préstamos a tu nombre, realizar fraudes comerciales o abrir cuentas en servicios que no requieren verificación presencial.</p>
+            </div>
+        </div>
+
+        <div class="acordeon-item">
+            <button class="acordeon-btn">¿Qué debo hacer legalmente?</button>
+            <div class="acordeon-contenido">
+                <p class="acordeon-texto">El primer paso vital es realizar la denuncia policial por extravío en la seccional más cercana. Esto genera un respaldo legal oficial que te exime de responsabilidad ante cualquier uso ilícito que un tercero intente darle a tu documento a partir de esa fecha.</p>
+            </div>
+        </div>
+
+        <div class="acordeon-item">
+            <button class="acordeon-btn">El peligro de las Redes Sociales</button>
+            <div class="acordeon-contenido">
+                <p class="acordeon-texto">Nunca publiques ni compartas fotos de cédulas encontradas en Facebook, Instagram o X. Al hacerlo, expones la fecha de nacimiento, la firma y el número de trámite de esa persona, facilitando enormemente las estafas digitales. Utiliza siempre nuestro motor de búsqueda ciego.</p>
+            </div>
+        </div>
+    </div>
+
+    <section class="zona-app revelar" id="motor-busqueda">
+        <h2 class="titulo-seccion">Accede a la red de búsqueda</h2>
+        
+        <div class="contenedor-tabs">
+            <div id="tab-encontre" class="tab activa" onclick="cambiarModo('encontre')">Encontré una Cédula</div>
+            <div id="tab-perdio" class="tab" onclick="cambiarModo('perdio')">Perdí mi Cédula</div>
+        </div>
+
+        <div class="contenedor-formularios">
+            <div id="seccion-encontre" class="tarjeta-form activa">
+                <label>Número de Cédula (sin puntos ni guiones)</label>
+                <input type="text" id="ci_encontrada" placeholder="Ej: 1.234.567-8" maxlength="11">
+                
+                <label>Nombre visible en el plástico</label>
+                <input type="text" id="nombre_encontrada" placeholder="Ej: María G.">
+                
+                <label>Tu correo electrónico (para avisarte si la buscan)</label>
+                <input type="email" id="email_encontro" placeholder="ejemplo@correo.com">
+
+                <label>Lugar del hallazgo (Opcional)</label>
+                <input type="text" id="lugar_encontrada" placeholder="Ej: Plaza Independencia, ómnibus 104, etc.">
+                
+                <button class="btn-submit" onclick="enviarHallazgo()">Publicar Hallazgo</button>
+            </div>
+
+            <div id="seccion-perdio" class="tarjeta-form">
+                <label>Tu Número de Cédula</label>
+                <input type="text" id="ci_perdida" placeholder="Ej: 1.234.567-8" maxlength="11">
+                
+                <label>Tu correo electrónico (para conectarte)</label>
+                <input type="email" id="email_perdio" placeholder="ejemplo@correo.com">
+                
+                <button class="btn-submit" onclick="buscarCedula()" style="background-color: #FF8C42;">Buscar Documento</button>
+            </div>
+        </div>
+
+        <div id="consola-resultados"></div>
+    </section>
+
+    <footer id="contacto">
+        <div class="contacto-info">
+            <h3>¿Necesitas ayuda con el sistema?</h3>
+            <p>El equipo de ApareCIó está aquí para asistirte.</p>
+            <a href="mailto:apareciotucedula@gmail.com" class="btn-correo">✉️ apareciotucedula@gmail.com</a>
+        </div>
+        
+        <div class="footer-legal">
+            <p><b>ApareCIó</b> | Desarrollado con ❤️ en Uruguay</p>
+            <p>© 2026 Facultad de Ingeniería UdelaR. Todos los derechos reservados.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.75rem;">Protección de Datos Personales regida por la Ley N° 18.331 de la República Oriental del Uruguay.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Funciones del Motor
+        function irAlMotor(modo) {
+            document.getElementById('motor-busqueda').scrollIntoView({ behavior: 'smooth' });
+            cambiarModo(modo);
+        }
+
+        function cambiarModo(modo) {
+            const secEncontre = document.getElementById('seccion-encontre');
+            const secPerdio = document.getElementById('seccion-perdio');
+            const tabEncontre = document.getElementById('tab-encontre');
+            const tabPerdio = document.getElementById('tab-perdio');
+            const consola = document.getElementById('consola-resultados');
+
+            consola.classList.remove('mostrar');
+            setTimeout(() => consola.style.display = 'none', 300);
+
+            if(modo === 'encontre') {
+                secPerdio.classList.remove('activa');
+                tabPerdio.classList.remove('activa');
+                setTimeout(() => {
+                    secEncontre.classList.add('activa');
+                    tabEncontre.classList.add('activa');
+                }, 100);
+            } else {
+                secEncontre.classList.remove('activa');
+                tabEncontre.classList.remove('activa');
+                setTimeout(() => {
+                    secPerdio.classList.add('activa');
+                    tabPerdio.classList.add('activa');
+                }, 100);
+            }
+        }
+
+        // Llamadas al Backend
+        async function enviarHallazgo() {
+            const btn = document.querySelector('#seccion-encontre .btn-submit');
+            const textoOriginal = btn.innerHTML;
+
+            try {
+                const ci = document.getElementById('ci_encontrada').value;
+                const nombre = document.getElementById('nombre_encontrada').value;
+                const email = document.getElementById('email_encontro').value;
+                const lugar = document.getElementById('lugar_encontrada').value; 
+
+                if(!ci || !nombre || !email) {
+                    mostrarMensaje("⚠️ Por favor, completa los campos obligatorios.", "#FEF3C7", "#92400E");
+                    return;
+                }
+
+                btn.innerHTML = "⏳ Publicando de forma segura...";
+                btn.disabled = true;
+                btn.style.opacity = "0.7";
+
+                const respuesta = await fetch('/api/encontre', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ numero_cedula: ci, nombre_pila: nombre, email_contacto: email, lugar: lugar })
+                });
+                
+                const datos = await respuesta.json();
+                mostrarMensaje("✅ " + datos.mensaje, "#D1FAE5", "#065F46");
+                
+                document.getElementById('ci_encontrada').value = '';
+                document.getElementById('nombre_encontrada').value = '';
+                document.getElementById('email_encontro').value = '';
+                document.getElementById('lugar_encontrada').value = ''; 
+                
+            } catch (error) {
+                mostrarMensaje("❌ Error de conexión con el servidor.", "#FEE2E2", "#991B1B");
+            } finally {
+                btn.innerHTML = textoOriginal;
+                btn.disabled = false;
+                btn.style.opacity = "1";
+            }
+        }
+
+        async function buscarCedula() {
+            const btn = document.querySelector('#seccion-perdio .btn-submit');
+            const textoOriginal = btn.innerHTML;
+
+            try {
+                const ci = document.getElementById('ci_perdida').value;
+                const email = document.getElementById('email_perdio').value;
+
+                if(!ci || !email) {
+                    mostrarMensaje("⚠️ Por favor, ingresa tu cédula y correo.", "#FEF3C7", "#92400E");
+                    return;
+                }
+
+                mostrarMensaje("⏳ Conectando con la base de datos...", "#E6F0FA", "#001f3f");
+                
+                btn.innerHTML = "🔍 Rastreado sistema...";
+                btn.disabled = true;
+                btn.style.opacity = "0.7";
+
+                const respuesta = await fetch('/api/busco', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ numero_cedula: ci, mi_email: email })
+                });
+
+                const datos = await respuesta.json();
+                
+                if(datos.match) {
+                    mostrarMensaje("🎉 " + datos.mensaje + "<br><br>👉 Escribe a: <b>" + datos.datos_contacto + "</b>", "#E6F0FA", "#001f3f");
+                } else {
+                    mostrarMensaje("😔 " + datos.mensaje, "#FEE2E2", "#991B1B");
+                }
+                
+            } catch (error) {
+                mostrarMensaje("❌ Error de conexión: El motor de búsqueda no está respondiendo.", "#FEE2E2", "#991B1B");
+            } finally {
+                btn.innerHTML = textoOriginal;
+                btn.disabled = false;
+                btn.style.opacity = "1";
+            }
+        }
+
+        function mostrarMensaje(texto, colorFondo, colorTexto) {
+            const div = document.getElementById('consola-resultados');
+            div.style.display = 'block';
+            div.innerHTML = texto;
+            div.style.backgroundColor = colorFondo;
+            div.style.color = colorTexto;
+            div.style.border = `1px solid ${colorTexto}`;
+            setTimeout(() => div.classList.add('mostrar'), 10);
+        }
+        
+        // Formateo de Cédula
+        function formatearCedula(input) {
+            let numeros = input.value.replace(/\D/g, '');
+            if (numeros.length > 8) numeros = numeros.substring(0, 8);
+            
+            let resultado = '';
+            for (let i = 0; i < numeros.length; i++) {
+                if (i === 1 || i === 4) resultado += '.'; 
+                else if (i === 7) resultado += '-'; 
+                resultado += numeros[i];
+            }
+            input.value = resultado;
+        }
+
+        document.getElementById('ci_encontrada').addEventListener('input', function() { formatearCedula(this); });
+        document.getElementById('ci_perdida').addEventListener('input', function() { formatearCedula(this); });
+
+        // Animación de Scroll
+        function animacionScroll() {
+            let revelables = document.querySelectorAll('.revelar');
+            for (let i = 0; i < revelables.length; i++) {
+                let alturaVentana = window.innerHeight;
+                let topeElemento = revelables[i].getBoundingClientRect().top;
+                let puntoRevelado = 100;
+                if (topeElemento < alturaVentana - puntoRevelado) revelables[i].classList.add('activo');
+            }
+        }
+        window.addEventListener('scroll', animacionScroll);
+        animacionScroll(); 
+
+        // Acordeón Dinámico
+        const acordeonBotones = document.querySelectorAll('.acordeon-btn');
+        acordeonBotones.forEach(boton => {
+            boton.addEventListener('click', function() {
+                const itemActual = this.parentElement;
+                document.querySelectorAll('.acordeon-item').forEach(item => {
+                    if (item !== itemActual) {
+                        item.classList.remove('activo');
+                        item.querySelector('.acordeon-contenido').style.maxHeight = null;
+                    }
+                });
+                itemActual.classList.toggle('activo');
+                const contenido = this.nextElementSibling;
+                if (itemActual.classList.contains('activo')) {
+                    contenido.style.maxHeight = contenido.scrollHeight + "px";
+                } else {
+                    contenido.style.maxHeight = null;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
