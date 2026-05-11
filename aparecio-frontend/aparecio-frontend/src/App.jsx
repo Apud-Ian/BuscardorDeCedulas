@@ -1,4 +1,5 @@
 import ContenedorSeguridad from './components/Contenedor-seguridad'
+import './App.css'
 import Features from './components/Features'
 import Footer from './components/Footer'
 import Hero from './components/Hero'

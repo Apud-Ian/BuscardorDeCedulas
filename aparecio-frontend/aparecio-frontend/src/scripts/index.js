@@ -1,7 +1,3 @@
-       function irAlMotor(modo) {
-            document.getElementById('motor-busqueda').scrollIntoView({ behavior: 'smooth' });
-            cambiarModo(modo);
-        }
 /*
         function cambiarModo(modo) {
             const secEncontre = document.getElementById('seccion-encontre');
