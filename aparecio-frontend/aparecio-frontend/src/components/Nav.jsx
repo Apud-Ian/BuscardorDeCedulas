@@ -39,10 +39,6 @@ const Nav = () => {
 
             </div>
 
-            <button className="bg-white text-[#001f3f] px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition">
-                Iniciar sesión
-            </button>
-
         </nav>
     );
 };

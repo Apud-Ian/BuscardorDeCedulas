@@ -34,7 +34,7 @@
             font-size: 16px; 
         }
 
-        /* 1. NAVBAR (MENÚ) */
+        /* 1. NAVBAR (MENÚ) 
         nav {
             background-color: #001f3f; 
             display: flex;
@@ -73,8 +73,7 @@
             font-size: 0.9rem;
             transition: opacity 0.2s;
         }
-
-        .btn-login {
+*/        .btn-login {
             background: transparent;
             color: var(--blanco);
             border: 2px solid var(--blanco);
@@ -91,7 +90,7 @@
             color: #001f3f;
         }
 
-        /* 2. HERO (PORTADA DE LA BANDERA) */
+        /* 2. HERO (PORTADA DE LA BANDERA) 
         .hero {
             background: linear-gradient(rgba(122, 180, 216, 0.5), rgba(0, 31, 63, 0.6)), url('BAnderaUruguayafull.png');
             background-color: var(--celeste-cielo);

@@ -1,44 +1,51 @@
-const ZonaApp = () => {
-    return (
-        <section className="zona-app revelar activa" id="motor-busqueda">
-            <h2 className="titulo-seccion">Accede a la red de búsqueda</h2>
+import { useState } from "react";
+import EncontreForm from "./EncontreForm";
+import BuscoForm from "./BuscoForm";
+function ZonaApp() {
+  const [mostrarBusqueda, setMostrarBusqueda] = useState(true);
 
-            <div className="contenedor-tabs activa">
-                <div id="tab-encontre" className="tab activa">Encontré una Cédula</div>
-                <div id="tab-perdio" className="tab" >Perdí mi Cédula</div>
-            </div>
+  return (
+    <section className="flex flex-col items-start  w-full max-w-4xl mx-auto mt-12">
+      
+      {/* BOTONES */}
+      
+      <div className="flex border-b gap-4 border-gray-200 bg-gray-50 overflow-hidden">
 
-            <div className="contenedor-formularios activa">
-                <div id="seccion-encontre" className="tarjeta-form activa">
-                    <label>Número de Cédula (sin puntos ni guiones)</label>
-                    <input type="text" id="ci_encontrada" placeholder="Ej: 1.234.567-8" maxLength="11" />
+  {/* Botón 1 - Buscar cédula */}
+  <button
+    onClick={() => setMostrarBusqueda(true)}
+    className={`flex-1 py-3 px-4 sm:py-4 sm:px-6 font-medium text-lg rounded-t-xl sm:text-xl md:text-2xl transition-all duration-300 flex items-center justify-center gap-2
+      ${mostrarBusqueda 
+        ? 'bg-teal-600 text-white shadow-sm border-b-4 border-teal-700' 
+        : 'bg-teal-500 text-white hover:bg-teal-600 border-b-4 border-transparent'
+      }`}
+  >
+    Buscar cédula
+  </button>
 
-                    <label>Nombre visible en el plástico</label>
-                    <input type="text" id="nombre_encontrada" placeholder="Ej: María G." />
+  {/* Botón 2 - Reportar cédula perdida */}
+  <button
+    onClick={() => setMostrarBusqueda(false)}
+    className={`flex-1 py-3 px-4 sm:py-4 sm:px-6 font-medium text-lg rounded-t-xl sm:text-xl md:text-2xl transition-all duration-300 flex items-center justify-center gap-2
+      ${!mostrarBusqueda 
+        ? 'bg-orange-600 text-white shadow-sm border-b-4 border-orange-700' 
+        : 'bg-orange-500 text-white hover:bg-orange-600 border-b-4 border-transparent'
+      }`}
+  >
+    Reportar cédula perdida
+  </button>
 
-                    <label>Tu correo electrónico (para avisarte si la buscan)</label>
-                    <input type="email" id="email_encontro" placeholder="ejemplo@correo.com" />
-
-                    <label>Lugar del hallazgo (Opcional)</label>
-                    <input type="text" id="lugar_encontrada" placeholder="Ej: Plaza Independencia, ómnibus 104, etc." />
-
-                    <button className="btn-submit" >Publicar Hallazgo</button>
-                </div>
-
-                <div id="seccion-perdio" className="tarjeta-form">
-                    <label>Tu Número de Cédula</label>
-                    <input type="text" id="ci_perdida" placeholder="Ej: 1.234.567-8" maxLength="11" />
-
-                    <label>Tu correo electrónico (para conectarte)</label>
-                    <input type="email" id="email_perdio" placeholder="ejemplo@correo.com" />
-
-                    <button className="btn-submit"  style={{ backgroundColor: '#FF8C42' }}>Buscar Documento</button>
-                </div>
-            </div>
-
-            <div id="consola-resultados" />
-        </section>
-    );
-};
+</div>
+<div className="w-full rounded-2xl shadow-lg">
+      {/* CONTENIDO */}
+      {mostrarBusqueda ? (
+        <BuscoForm />
+      ) : (
+        <EncontreForm />
+      )}
+      </div>
+    </section>
+  );
+}
 
 export default ZonaApp;
