@@ -5,7 +5,7 @@ function ZonaApp() {
   const [mostrarBusqueda, setMostrarBusqueda] = useState(true);
 
   return (
-    <section className="flex flex-col items-start  w-full max-w-4xl mx-auto mt-12">
+    <section id="app" className="flex flex-col items-start  w-full max-w-4xl mx-auto mt-12">
       
       {/* BOTONES */}
       
@@ -36,7 +36,7 @@ function ZonaApp() {
   </button>
 
 </div>
-<div className="w-full rounded-2xl shadow-lg">
+<div  className="w-full rounded-2xl shadow-lg">
       {/* CONTENIDO */}
       {mostrarBusqueda ? (
         <BuscoForm />

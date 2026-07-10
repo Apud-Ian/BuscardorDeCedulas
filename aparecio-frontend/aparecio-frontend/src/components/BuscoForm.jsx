@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import useBusco from '../scripts/hooks/useBusco.js';
 
 const BuscoForm = () => {
   const [formData, setFormData] = useState({
@@ -7,7 +8,8 @@ const BuscoForm = () => {
   });
 
   const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { enviarBusqueda, isSubmitting } = useBusco();
 
   // Auto-formato: 1.234.567-8
   const handleCedulaChange = (e) => {
@@ -80,14 +82,21 @@ const BuscoForm = () => {
 
     if (!validateForm()) return;
 
-    setIsSubmitting(true);
+    const resultado = await enviarBusqueda(formData);
 
-    console.log('Buscando documento...', formData);
+    if (!resultado.ok) {
+      alert(resultado.error);
+      return;
+    }
 
-    setTimeout(() => {
-      alert('Búsqueda realizada');
-      setIsSubmitting(false);
-    }, 1500);
+    alert(resultado.data.mensaje);
+
+    setFormData({
+      cedula: '',
+      email: ''
+    });
+
+    setErrors({});
   };
 
   return (
@@ -157,7 +166,6 @@ const BuscoForm = () => {
           )}
         </div>
 
-        {/* Botón */}
         <button
           type="submit"
           disabled={isSubmitting}
