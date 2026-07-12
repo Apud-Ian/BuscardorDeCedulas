@@ -9,6 +9,11 @@ const BuscoForm = () => {
 
   const [errors, setErrors] = useState({});
 
+  const [mensaje, setMensaje] = useState({
+    texto: '',
+    tipo: ''
+  });
+
   const { enviarBusqueda, isSubmitting } = useBusco();
 
   // Auto-formato: 1.234.567-8
@@ -80,16 +85,27 @@ const BuscoForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setMensaje({
+      texto: '',
+      tipo: ''
+    });
+
     if (!validateForm()) return;
 
     const resultado = await enviarBusqueda(formData);
-
+console.log('Resultado de la búsqueda:', resultado);
     if (!resultado.ok) {
-      alert(resultado.error);
+      setMensaje({
+        texto: resultado.error,
+        tipo: 'error'
+      });
       return;
     }
 
-    alert(resultado.data.mensaje);
+    setMensaje({
+      texto: resultado.data.mensaje,
+      tipo: 'success'
+    });
 
     setFormData({
       cedula: '',
@@ -175,6 +191,18 @@ const BuscoForm = () => {
             ? 'Buscando...'
             : 'Buscar Documento'}
         </button>
+
+        {mensaje.texto && (
+          <div
+            className={`rounded-xl border p-4 text-center font-medium ${
+              mensaje.tipo === 'success'
+                ? 'border-green-500 bg-green-100 text-green-800'
+                : 'border-red-500 bg-red-100 text-red-800'
+            }`}
+          >
+            {mensaje.texto}
+          </div>
+        )}
       </form>
     </div>
   );

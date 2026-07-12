@@ -11,6 +11,11 @@ const EncontreForm = () => {
 
   const [errors, setErrors] = useState({});
 
+  const [mensaje, setMensaje] = useState({
+    texto: '',
+    tipo: ''
+  });
+
   const { enviarHallazgo, isSubmitting } = useEncontre();
 
   // Auto-formato de Cédula: 5.426.847-8
@@ -85,16 +90,27 @@ const EncontreForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setMensaje({
+      texto: '',
+      tipo: ''
+    });
+
     if (!validateForm()) return;
 
     const resultado = await enviarHallazgo(formData);
 
     if (!resultado.ok) {
-      alert(resultado.error);
+      setMensaje({
+        texto: resultado.error,
+        tipo: 'error'
+      });
       return;
     }
 
-    alert(resultado.data.mensaje);
+    setMensaje({
+      texto: resultado.data.mensaje,
+      tipo: 'success'
+    });
 
     setFormData({
       cedula: '',
@@ -119,7 +135,6 @@ const EncontreForm = () => {
       <form onSubmit={handleSubmit} className="space-y-6">
 
         {/* Número de Cédula */}
-
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Número de Cédula
@@ -151,7 +166,6 @@ const EncontreForm = () => {
         </div>
 
         {/* Nombre */}
-
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Nombre visible en el plástico
@@ -178,7 +192,6 @@ const EncontreForm = () => {
         </div>
 
         {/* Email */}
-
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Tu correo electrónico
@@ -205,7 +218,6 @@ const EncontreForm = () => {
         </div>
 
         {/* Lugar */}
-
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Lugar del hallazgo
@@ -232,6 +244,18 @@ const EncontreForm = () => {
             ? 'Registrando...'
             : 'Registrar cédula encontrada'}
         </button>
+
+        {mensaje.texto && (
+          <div
+            className={`rounded-xl border p-4 text-center font-medium ${
+              mensaje.tipo === 'success'
+                ? 'border-green-500 bg-green-100 text-green-800'
+                : 'border-red-500 bg-red-100 text-red-800'
+            }`}
+          >
+            {mensaje.texto}
+          </div>
+        )}
 
       </form>
     </div>

@@ -9,6 +9,8 @@ const Nav = () => {
                
                 <div className="w-[1.9px] h-6 mx-4 bg-gray-300"></div>
 
+                <img src="/favicon.png" alt="Circular app logo with stylized A in blue and white, located to the right of the site name ApareCIó inside a dark blue navigation bar, conveying a clean professional tone" className="w-10 h-10" />
+
             </div>
 
             <div className="flex gap-6 flex-wrap text-4xl justify-center">
