@@ -17,7 +17,7 @@ const Hero = () => {
                     en todo el país.
                 </p>
 
-                <a  href="#app" className="bg-white text-[#001f3f] px-8 py-4 text-lg font-extrabold rounded-lg cursor-pointer w-full max-w-[320px] transition duration-200 hover:scale-105 hover:shadow-xl">
+                <a href="#app" className="bg-white text-[#001f3f] px-8 py-4 text-lg font-extrabold rounded-lg cursor-pointer w-full max-w-[320px] transition duration-200 hover:scale-105 hover:shadow-xl">
                     Comenzar búsqueda
                 </a>
                 <div className=" hidden md:block">
