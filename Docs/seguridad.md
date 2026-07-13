@@ -1,88 +1,140 @@
-Seguridad del Sistema
+# Seguridad del Sistema
 
-La seguridad es un pilar central del proyecto. Dado que se manejan datos personales sensibles (como nombre, número de cédula o información de contacto), el sistema está diseñado bajo un enfoque de protección máxima de la información, asegurando que ni siquiera los administradores puedan acceder a los datos en texto plano.
+La seguridad constituye uno de los pilares fundamentales de **ApareCIó**. Debido a que la aplicación procesa información personal relacionada con documentos de identidad, el sistema fue diseñado siguiendo el principio de **privacidad por defecto**, minimizando la exposición de datos y reduciendo los riesgos asociados a su almacenamiento.
 
-Protección de Datos Sensibles
+El objetivo principal es permitir la búsqueda y recuperación de una cédula sin publicar información personal ni revelar datos sensibles durante el proceso de coincidencia.
 
-Todos los datos personales ingresados por los usuarios son procesados mediante técnicas de hashing criptográfico antes de ser almacenados.
+---
 
-Los campos como:
+# Protección de la Información
 
-Nombre
-Número de cédula
-Teléfono u otros datos de contacto
+El sistema evita utilizar directamente la información sensible para realizar las comparaciones entre registros.
 
-no se guardan en texto legible, sino como representaciones hash irreversibles.
+Para ello, los datos necesarios para identificar una coincidencia se procesan mediante un **hash criptográfico HMAC-SHA256**, utilizando una clave secreta almacenada en variables de entorno.
 
-Esto implica que:
-No es posible reconstruir los datos originales a partir de la base de datos.
-En caso de una filtración, la información no sería utilizable.
+Este mecanismo permite:
 
-Además, se pueden aplicar técnicas complementarias como:
+* Comparar registros sin utilizar los datos originales.
+* Evitar la exposición de información sensible durante el proceso de matching.
+* Mantener un identificador consistente para realizar las búsquedas.
 
-Salting: agregar valores aleatorios a los datos antes de hashearlos para evitar ataques por diccionario.
-Uso de algoritmos criptográficos robustos y actuales.
-Principio de “Cero Conocimiento”
+La clave utilizada para generar los hashes nunca forma parte del código fuente y se almacena en un archivo `.env`.
 
-El sistema sigue un enfoque cercano a zero-knowledge:
+---
 
-Los datos sensibles no son accesibles ni siquiera para los desarrolladores o administradores.
-El sistema solo compara hashes para realizar coincidencias.
-La lógica está diseñada para operar sin necesidad de revelar información personal.
-Validación de Datos
+# Variables de Entorno
 
-Antes de que cualquier dato sea procesado o almacenado, pasa por un sistema de validación en el controlador:
+Toda la información sensible utilizada por la aplicación se configura mediante variables de entorno.
 
-Verificación de formato (ej: estructura válida de cédula)
-Control de tipos de datos
-Sanitización de inputs para evitar inyecciones
-Rechazo de datos incompletos o inconsistentes
+Entre ellas:
 
-Esto reduce significativamente el riesgo de:
+* Clave secreta utilizada para generar hashes.
+* Configuración del servidor.
+* Datos necesarios para el funcionamiento interno.
 
-Datos corruptos
-Ataques de inyección
-Uso indebido del sistema
-Eliminación Automática de Datos
+De esta forma se evita incorporar información confidencial dentro del repositorio del proyecto.
 
-Para minimizar riesgos, el sistema implementa una política de retención limitada:
+---
 
-Los registros se eliminan automáticamente después de un período definido (por ejemplo, 60 días).
-Esto aplica tanto a:
-Reportes de cédulas encontradas
-Solicitudes de verificación
+# Validación de Datos
 
-Beneficios:
+Antes de procesar cualquier solicitud, el backend realiza diferentes validaciones sobre la información recibida.
 
-Reduce la exposición de datos a largo plazo
-Cumple con principios de minimización de datos
-Disminuye el impacto de posibles incidentes de seguridad
-Protección contra Usuarios Maliciosos
+Entre ellas:
 
-El sistema incluye medidas para mitigar el uso indebido:
+* Verificación de campos obligatorios.
+* Validación del formato de la cédula.
+* Validación del correo electrónico.
+* Sanitización de datos de entrada.
+* Comprobación de tipos de datos.
 
-Limitación de envíos (rate limiting)
-Validación estricta de formularios
-Moderación básica de contenido subido
-Posible sistema de reputación o verificación de usuarios
+Si alguna validación falla, la solicitud es rechazada antes de acceder a la base de datos.
 
-Esto ayuda a prevenir:
+---
 
-Spam
-Reportes falsos
-Uso abusivo de la plataforma
-Seguridad ante Ataques
+# Protección de la Base de Datos
 
-Se contemplan medidas para proteger el sistema frente a amenazas comunes:
+La aplicación utiliza **SQLite** junto con **consultas parametrizadas**, evitando construir consultas SQL mediante concatenación de cadenas.
 
-Protección contra inyección de código (SQL, scripts, etc.)
-Manejo seguro de sesiones y autenticación
-Uso de conexiones seguras (HTTPS)
-Separación entre lógica, datos y presentación
-Enfoque General
+Esto ayuda a prevenir ataques como:
 
-La seguridad no es un agregado, sino parte del diseño del sistema:
+* SQL Injection.
+* Manipulación de consultas.
+* Inserción de datos maliciosos.
 
-Se prioriza la privacidad desde el inicio
-Se minimiza la exposición de datos
-Se limita el acceso incluso a nivel interno
+Además, el acceso a la base de datos se encuentra centralizado en la capa **Model**, manteniendo separada la lógica de negocio del acceso a los datos.
+
+---
+
+# Sistema de Matching Seguro
+
+El proceso de coincidencia se realiza íntegramente en el servidor.
+
+El flujo general es el siguiente:
+
+1. El usuario envía la información mediante el formulario.
+2. El servidor valida los datos recibidos.
+3. Se genera el hash correspondiente utilizando la clave secreta.
+4. El sistema compara dicho hash con los registros almacenados.
+5. Si existe una coincidencia, se devuelve una respuesta al cliente.
+
+Durante este proceso nunca es necesario exponer públicamente la información utilizada para realizar la comparación.
+
+---
+
+# Eliminación Automática de Registros
+
+Para cumplir con el principio de minimización de datos, el sistema incorpora una tarea programada mediante **node-cron**.
+
+Esta tarea elimina automáticamente los registros que superan el período de conservación definido por la aplicación.
+
+Este mecanismo permite:
+
+* Reducir la cantidad de información almacenada.
+* Disminuir el riesgo ante una eventual filtración.
+* Evitar conservar datos innecesarios durante largos períodos.
+
+---
+
+# Manejo de Errores
+
+La aplicación implementa un manejo centralizado de errores para evitar revelar información interna del servidor.
+
+En caso de producirse una excepción:
+
+* Se registra el error en el servidor.
+* Se devuelve un mensaje controlado al cliente.
+* No se exponen rutas internas, consultas SQL ni información sensible.
+
+---
+
+# Principios de Seguridad
+
+La implementación de ApareCIó se basa en los siguientes principios:
+
+* **Privacidad por defecto:** la información personal nunca se publica.
+* **Minimización de datos:** únicamente se procesa la información necesaria.
+* **Separación de responsabilidades:** la arquitectura MVC reduce el acceso innecesario a los datos.
+* **Procesamiento seguro:** las comparaciones se realizan mediante hashes criptográficos.
+* **Protección de la configuración:** los secretos del sistema permanecen fuera del código fuente.
+
+---
+
+# Mejoras Futuras
+
+La arquitectura del proyecto permite incorporar nuevas medidas de seguridad sin modificar significativamente la estructura existente.
+
+Entre las mejoras previstas se encuentran:
+
+* Autenticación mediante JWT.
+* Rate Limiting para limitar solicitudes por IP.
+* Implementación de HTTPS en producción.
+* Registro de auditoría (logs de eventos).
+* Documentación OpenAPI con mecanismos de autenticación.
+* Cifrado adicional para información de contacto almacenada.
+
+---
+
+# Resumen
+
+La estrategia de seguridad de **ApareCIó** busca proteger la privacidad de los usuarios desde el diseño de la aplicación. La combinación de validaciones, procesamiento mediante **HMAC-SHA256**, consultas parametrizadas, variables de entorno y eliminación automática de registros permite reducir la exposición de datos y ofrecer un mecanismo seguro para la recuperación de cédulas de identidad.

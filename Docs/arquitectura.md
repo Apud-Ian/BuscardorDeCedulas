@@ -1,76 +1,201 @@
-Arquitectura del Sistema
+# Arquitectura del Sistema
 
+Este documento describe la arquitectura implementada en **ApareCIó**, explicando cómo se organizan los distintos componentes del sistema y cómo interactúan entre sí.
 
-El sistema se basa en una arquitectura MVC (Modelo - Vista - Controlador), lo que permite organizar el código de forma clara, escalable y mantenible a medida que el proyecto crece.
+La aplicación sigue el patrón **Modelo - Vista - Controlador (MVC)** en el backend, mientras que el frontend está desarrollado como una **Single Page Application (SPA)** utilizando React.
 
-Estructura General
+---
 
+# Arquitectura General
 
-<img src="images/MVC.png" width="500px">
+<p align="center">
+  <img src="images/MVC.png" width="500px" alt="Arquitectura MVC">
+</p>
 
-La aplicación se divide en tres componentes principales:
+La solución está compuesta por tres capas principales:
 
-Modelo (Model)
+* **Frontend (React)**
+* **Backend (Node.js + Express)**
+* **Base de datos (SQLite)**
 
-Encargado de la gestión de datos.
+La comunicación entre el cliente y el servidor se realiza mediante una **API REST**, utilizando solicitudes HTTP y respuestas en formato JSON.
 
-Define la estructura de la información (cédulas encontradas, reportes, usuarios, etc.)
-Maneja la interacción con la base de datos
-Contiene la lógica relacionada con el almacenamiento y recuperación de datos
-Vista (View)
+---
 
-Encargada de la presentación al usuario.
+# Frontend
 
-Muestra la información de forma clara y segura
-Solo expone datos no sensibles
-Permite la interacción del usuario (formularios, consultas, etc.)
-Controlador (Controller)
+El frontend fue desarrollado utilizando **React** y **Vite**, siguiendo una estructura basada en componentes reutilizables.
 
-Actúa como intermediario entre la Vista y el Modelo.
+Sus responsabilidades principales son:
 
-Recibe las solicitudes del usuario
-Procesa la lógica de la aplicación
-Valida los datos antes de enviarlos al modelo
-Devuelve la respuesta adecuada a la vista
-Flujo de Funcionamiento
-El usuario interactúa con la interfaz (Vista)
-La solicitud se envía al servidor
-El Controlador recibe la petición
-Se validan los datos de entrada
-El Controlador consulta o modifica el Modelo
-Se obtiene una respuesta
-Se devuelve a la Vista
-Validación de Datos
+* Mostrar la interfaz de usuario.
+* Gestionar la navegación de la aplicación.
+* Validar datos básicos antes del envío.
+* Enviar solicitudes a la API.
+* Mostrar mensajes de éxito o error según la respuesta del servidor.
 
-El sistema incluirá un mecanismo de validación dentro del Controlador para:
+La lógica de comunicación con la API se encuentra encapsulada mediante **Hooks personalizados**, facilitando la reutilización del código y el mantenimiento del proyecto.
 
-Verificar que los datos ingresados sean correctos
-Evitar entradas maliciosas o inconsistentes
-Garantizar la integridad de la información antes de almacenarla
+---
 
-Esto es especialmente importante en un sistema que maneja información sensible, incluso si esta no se expone públicamente.
+# Backend (MVC)
 
-¿Por qué usar MVC?
+El backend utiliza una arquitectura **MVC (Model - View - Controller)** para separar claramente las responsabilidades de cada componente.
 
-Se eligió este patrón por varias razones clave:
+## Modelo (Model)
 
-Separación de responsabilidades: cada componente tiene una función clara, lo que facilita el desarrollo y mantenimiento.
-Escalabilidad: permite agregar nuevas funcionalidades sin afectar todo el sistema.
-Reutilización de código: los modelos y controladores pueden reutilizarse en distintas partes del sistema.
-Organización del proyecto: hace que el código sea más legible y estructurado.
-Control de Peticiones
+Los modelos son responsables del acceso a la base de datos.
 
-MVC permite un mejor control de las peticiones al servidor porque:
+Entre sus funciones se encuentran:
 
-Todas las solicitudes pasan por los Controladores
-Se puede centralizar la lógica de validación y seguridad
-Facilita la implementación de reglas de negocio (como el sistema de matching)
-Permite gestionar errores y respuestas de forma consistente
-Escalabilidad Futura
+* Consultar registros.
+* Insertar nuevos datos.
+* Buscar coincidencias.
+* Ejecutar consultas SQL parametrizadas.
+* Gestionar la persistencia de la información.
 
-La arquitectura está pensada para evolucionar, permitiendo:
+Toda la interacción con SQLite se realiza desde esta capa.
 
-Incorporar nuevas vistas (por ejemplo, aplicación móvil)
-Ampliar la lógica del sistema de coincidencias
-Mejorar la seguridad y validaciones
-Integrar nuevos módulos sin romper la estructura existente
+---
+
+## Controlador (Controller)
+
+Los controladores contienen la lógica principal de la aplicación.
+
+Sus responsabilidades incluyen:
+
+* Recibir las solicitudes HTTP.
+* Validar la información recibida.
+* Generar el hash utilizado para el sistema de matching.
+* Invocar los métodos correspondientes del modelo.
+* Construir la respuesta enviada al cliente.
+
+Los controladores funcionan como intermediarios entre la API y la base de datos.
+
+---
+
+## Rutas (Routes)
+
+Las rutas definen los distintos endpoints de la API.
+
+Cada ruta recibe la solicitud del cliente y la redirige al controlador correspondiente.
+
+Esta separación facilita agregar nuevas funcionalidades sin modificar el resto del sistema.
+
+---
+
+# Base de Datos
+
+La aplicación utiliza **SQLite** como sistema gestor de base de datos.
+
+En ella se almacenan:
+
+* Registros de cédulas encontradas.
+* Hashes utilizados para la comparación.
+* Información necesaria para establecer el contacto entre las partes.
+
+La información se almacena únicamente cuando es necesaria para el funcionamiento del sistema.
+
+---
+
+# Flujo de Funcionamiento
+
+El recorrido de una solicitud dentro del sistema es el siguiente:
+
+```text
+Usuario
+    │
+    ▼
+Frontend (React)
+    │
+    ▼
+API REST (Express)
+    │
+    ▼
+Routes
+    │
+    ▼
+Controller
+    │
+    ▼
+Validación
+    │
+    ▼
+Generación de Hash
+    │
+    ▼
+Model
+    │
+    ▼
+SQLite
+    │
+    ▼
+Respuesta JSON
+    │
+    ▼
+Frontend
+```
+
+---
+
+# Validación de Datos
+
+Antes de almacenar o consultar información, el backend realiza diferentes validaciones:
+
+* Verificación de campos obligatorios.
+* Validación del formato de la cédula.
+* Validación del correo electrónico.
+* Sanitización de datos de entrada.
+* Manejo de errores para evitar información inconsistente.
+
+Estas validaciones permiten mantener la integridad de la información y reducir posibles fallos durante el procesamiento.
+
+---
+
+# Organización del Proyecto
+
+La estructura del backend se encuentra dividida en carpetas con responsabilidades específicas.
+
+```text
+backend/
+│
+├── controllers/
+├── models/
+├── routes/
+├── database/
+├── services/
+├── cron/
+├── utils/
+└── server.js
+```
+
+Por su parte, el frontend organiza los componentes, hooks y servicios de manera independiente, favoreciendo la reutilización del código.
+
+---
+
+# Ventajas de la Arquitectura
+
+La arquitectura implementada ofrece diversos beneficios:
+
+* Separación clara de responsabilidades.
+* Código modular y fácil de mantener.
+* Reutilización de componentes y lógica.
+* Facilidad para incorporar nuevas funcionalidades.
+* Comunicación desacoplada mediante API REST.
+* Mayor facilidad para realizar pruebas y depuración.
+
+---
+
+# Escalabilidad
+
+La estructura actual permite incorporar nuevas funcionalidades sin modificar significativamente el proyecto existente.
+
+Entre las posibles mejoras futuras se encuentran:
+
+* Sistema de autenticación mediante JWT.
+* Panel administrativo.
+* Notificaciones automáticas por correo electrónico.
+* Migración a una base de datos como PostgreSQL o MySQL.
+* Contenerización mediante Docker.
+* Despliegue en servicios cloud.
+* Versionado de la API.

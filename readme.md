@@ -1,66 +1,126 @@
-Recuperación de Cédulas 
+# ApareCIó – Recuperación de Cédulas
 
-<img src="/Docs/images/apareCIó_logo.jpeg" width="700px">
-Problema
+<p align="center">
+  <img src="/Docs/images/apareCIó_logo.jpeg" width="700px" alt="Logo ApareCIó">
+</p>
 
-En Uruguay, perder la cédula de identidad es una situación frecuente que genera múltiples inconvenientes: trámites detenidos, riesgo de uso indebido de datos personales y dificultades para que el documento regrese a su dueño.
+## Descripción
 
-Por otro lado, las personas que encuentran una cédula suelen no tener un canal claro, seguro y efectivo para devolverla. Las soluciones actuales (redes sociales, grupos, etc.) implican exponer datos sensibles públicamente, lo cual representa un riesgo de privacidad.
+**ApareCIó** es una plataforma web desarrollada para facilitar la recuperación de cédulas de identidad perdidas en Uruguay mediante un sistema seguro y privado.
 
-Solución Propuesta
+El objetivo del proyecto es conectar a la persona que encontró una cédula con su propietario sin publicar información sensible, reduciendo el riesgo de exposición de datos personales y simplificando el proceso de devolución.
 
-Este proyecto plantea una plataforma web que facilita el reencuentro entre quien pierde una cédula y quien la encuentra, sin exponer información personal de forma pública.
+---
 
-El enfoque central es un sistema de coincidencia privada (matching seguro):
+## El problema
 
-La persona que encuentra una cédula registra el hallazgo con datos no sensibles.
-La persona que la perdió ingresa sus datos de forma privada.
-El sistema compara la información internamente.
-Si hay coincidencia, se habilita un canal de contacto entre ambas partes.
+Cuando una persona pierde su cédula de identidad, normalmente enfrenta inconvenientes como:
 
-De esta forma, se resuelve el problema sin comprometer la privacidad de los usuarios.
+* Demoras en trámites importantes.
+* Riesgo de uso indebido de información personal.
+* Falta de un mecanismo simple para recuperar el documento.
 
-Principios de Diseño
-Privacidad por defecto: nunca se exponen datos personales públicamente.
-Minimización de datos: solo se almacena lo estrictamente necesario.
-Seguridad: uso de encriptación y procesamiento seguro.
-Temporalidad: eliminación automática de registros antiguos.
-Consentimiento: el usuario acepta explícitamente el uso de sus datos.
+Al mismo tiempo, quienes encuentran una cédula generalmente no disponen de un medio seguro para contactar a su dueño, recurriendo muchas veces a publicaciones en redes sociales donde se exponen datos personales.
 
-Tecnologías a Utilizar
+---
 
-Frontend
-h
-Por definir...
+## Nuestra solución
 
-Backend / Base de Datos
+ApareCIó implementa un sistema de coincidencia privada (*Secure Matching*) que permite verificar internamente si una cédula encontrada pertenece a una persona que la está buscando.
 
-Por definir...
+El funcionamiento general es el siguiente:
 
-Extras técnicos
+1. Una persona registra el hallazgo de una cédula.
+2. El propietario ingresa sus datos mediante un formulario privado.
+3. El sistema compara la información utilizando identificadores protegidos.
+4. Cuando existe una coincidencia válida, se habilita un medio de contacto entre ambas partes.
 
-Script para difuminar automáticamente imágenes subidas
-Sistema de comparación de datos mediante hash
-API REST para comunicación cliente-servidor (futuro)
+En ningún momento la información personal queda expuesta públicamente.
 
+---
+<p align="center">
+  <img src="/Docs/images/image.png" width="700px" alt="Logo ApareCIó">
+</p>
+## Características principales
 
+* Registro de cédulas encontradas.
+* Consulta privada por parte del propietario.
+* Sistema de coincidencia mediante hash criptográfico.
+* Protección de la información personal.
+* Eliminación automática de registros antiguos.
+* Interfaz sencilla y responsiva.
 
+---
 
-MVP (Producto Mínimo Viable)
+## Tecnologías utilizadas
 
-El MVP incluirá:
+### Frontend
 
-Registro de cédulas encontradas con:
-Ubicación aproximada
-Fecha
-Imagen (difuminada automáticamente)
-ID del caso
-Formulario para que el dueño:
-Ingrese datos de su cédula (privado)
-Solicite verificación
-Sistema básico de matching:
-Comparación de datos clave
-Notificación en caso de coincidencia
-Visualización pública:
-Lista de cédulas encontradas (sin datos personales)
-Estado del caso (pendiente / resuelto)
+* React
+* Vite
+* Tailwind CSS
+* JavaScript (ES Modules)
+
+### Backend
+
+* Node.js
+* Express.js
+
+### Base de datos
+
+* SQLite
+
+### Librerías principales
+
+* bcrypt
+* crypto
+* cors
+* dotenv
+* node-cron
+* nodemailer
+
+---
+
+## Principios del proyecto
+
+El desarrollo de ApareCIó se basa en cinco principios fundamentales:
+
+* **Privacidad por defecto:** los datos personales nunca son públicos.
+* **Seguridad:** la información sensible se procesa mediante mecanismos criptográficos.
+* **Minimización de datos:** únicamente se almacenan los datos necesarios para el funcionamiento del sistema.
+* **Temporalidad:** los registros se eliminan automáticamente luego de un período determinado.
+* **Consentimiento:** el usuario acepta explícitamente el tratamiento de sus datos antes de enviar cualquier información.
+
+---
+
+## Estructura de la documentación
+
+La documentación técnica completa se encuentra dentro de la carpeta `Docs`.
+
+Incluye:
+
+* Arquitectura del sistema.
+* Flujo completo de funcionamiento.
+* Documentación de la API.
+* Modelo de seguridad.
+* Diagramas e imágenes del proyecto.
+
+---
+
+## Estado del proyecto
+
+Actualmente el proyecto se encuentra funcional e incluye:
+
+* Registro de cédulas encontradas.
+* Solicitud privada de recuperación.
+* Sistema de matching seguro.
+* Backend con arquitectura MVC.
+* Base de datos SQLite.
+* Comunicación mediante API REST.
+* Eliminación automática de registros mediante tareas programadas.
+
+---
+
+## Objetivo
+
+ApareCIó busca ofrecer una alternativa moderna, segura y respetuosa con la privacidad para facilitar la recuperación de documentos de identidad perdidos, evitando la exposición innecesaria de información personal y simplificando el proceso tanto para quien encuentra una cédula como para su propietario.

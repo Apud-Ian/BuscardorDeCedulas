@@ -1,114 +1,181 @@
-Flujo del Sistema
+# Flujo del Sistema
 
-<img src="images/Diagrama_De_Flujo.webp" width="500">
+<p align="center">
+  <img src="images/Diagrama_De_Flujo.webp" width="500" alt="Diagrama de Flujo">
+</p>
 
+## Descripción General
 
-Descripción General
+El funcionamiento de **ApareCIó** se basa en dos procesos principales:
 
-El sistema se divide en dos flujos principales:
+* Registro de una cédula encontrada.
+* Búsqueda de una cédula perdida.
 
-Registro de una cédula encontrada
-Búsqueda y verificación por parte del dueño
+Ambos procesos utilizan el mismo mecanismo de validación y comparación segura mediante **HMAC-SHA256**, garantizando que la información sensible no sea utilizada directamente durante el proceso de búsqueda.
 
-Ambos flujos están diseñados para garantizar:
+---
 
-Validación de datos
-Protección mediante encriptación
-Comparación segura sin exponer información sensible
-Flujo 1: Registro de Cédula Encontrada
-1. Inicio
+# Flujo 1: Registro de una Cédula Encontrada
 
-El proceso comienza cuando un usuario encuentra una cédula e ingresa al sistema.
+## 1. Acceso al formulario
 
-2. Entrada de Datos
+La persona que encuentra una cédula completa el formulario correspondiente desde la aplicación web.
 
-El usuario proporciona información básica:
+Los datos solicitados incluyen:
 
-Ubicación aproximada
-Fecha
-Imagen (procesada posteriormente)
-Datos mínimos necesarios
-3. Verificación de Datos
+* Número de cédula.
+* Nombre.
+* Correo electrónico de contacto.
+* Lugar donde fue encontrada.
 
-El sistema valida:
+---
 
-Formato de los datos
-Integridad de la información
-Campos obligatorios
+## 2. Validación de los datos
 
-Si los datos no son válidos:
+Antes de procesar la información, el servidor verifica:
 
-Se rechaza la solicitud
-Se solicita corrección
-4. Validación Exitosa
+* Campos obligatorios.
+* Formato correcto de la cédula.
+* Formato válido del correo electrónico.
+* Integridad de los datos recibidos.
 
-Si los datos son correctos:
+Si alguna validación falla, la solicitud es rechazada y se devuelve un mensaje de error.
 
-Se continúa con el procesamiento
-5. Encriptación de Datos
+---
 
-Antes de almacenar:
+## 3. Generación del Hash
 
-Los datos sensibles se transforman mediante hashing
-No se guarda información en texto plano
-6. Almacenamiento
+Una vez validados los datos, el sistema genera un **HMAC-SHA256** utilizando la información necesaria para el proceso de coincidencia y una clave secreta almacenada en variables de entorno.
 
-Los datos ya protegidos se guardan en la base de datos.
+Este hash será el identificador utilizado posteriormente para comparar registros.
 
-7. Respuesta al Usuario
+---
 
-El sistema devuelve:
+## 4. Almacenamiento
 
-Confirmación de registro exitoso
-ID del caso
-8. Fin
-Flujo 2: Búsqueda de Cédula Perdida
-1. Inicio
+El backend almacena en SQLite la información necesaria junto con el hash generado.
 
-El usuario que perdió su cédula accede al sistema.
+---
 
-2. Entrada de Datos
+## 5. Búsqueda de coincidencias
 
-El usuario ingresa:
+Después del registro, el sistema verifica automáticamente si existe una solicitud previa correspondiente a esa misma cédula.
 
-Datos personales necesarios para identificar su cédula
-3. Verificación de Datos
+* Si existe una coincidencia, el proceso de matching finaliza exitosamente.
+* Si no existe, el registro queda almacenado para futuras consultas.
 
-Se valida:
+---
 
-Formato correcto
-Consistencia de los datos
+## 6. Respuesta al cliente
 
-Si los datos no son válidos:
+La API devuelve una respuesta indicando si el registro fue realizado correctamente y si se encontró o no una coincidencia.
 
-Se rechaza la solicitud
-4. Validación Exitosa
+---
 
-Si los datos son correctos:
+# Flujo 2: Búsqueda de una Cédula Perdida
 
-Se continúa al proceso de comparación
-5. Comparación con la Base de Datos
+## 1. Acceso al formulario
 
-El sistema:
+La persona que perdió su cédula ingresa sus datos desde el formulario de búsqueda.
 
-Aplica el mismo proceso de hashing a los datos ingresados
-Compara contra los registros almacenados
-6. Evaluación de Coincidencias
-Caso 1: No hay coincidencias
-Se informa al usuario que no se encontraron resultados
-Finaliza el proceso
-Caso 2: Hay coincidencias
-Se identifica el registro correspondiente
-Se habilita el proceso de recuperación
-7. Envío para Recuperación
+---
 
-El sistema:
+## 2. Validación
 
-Facilita el contacto entre ambas partes
-Sin exponer datos sensibles directamente
-8. Fin
-Consideraciones de Seguridad en el Flujo
-Todos los datos sensibles son procesados antes de almacenarse
-La comparación se realiza sobre datos encriptados
-No existe exposición pública de información personal
-La validación ocurre antes de cualquier operación crítica
+El servidor verifica que la información recibida sea válida.
+
+Se controlan:
+
+* Campos obligatorios.
+* Formato de la cédula.
+* Consistencia de los datos.
+
+---
+
+## 3. Generación del Hash
+
+Se aplica exactamente el mismo algoritmo **HMAC-SHA256** utilizado durante el registro de la cédula encontrada.
+
+De esta forma ambos registros generan el mismo identificador cuando corresponden a la misma persona.
+
+---
+
+## 4. Comparación
+
+El sistema consulta la base de datos y compara el hash generado con los hashes previamente almacenados.
+
+---
+
+## 5. Resultado
+
+### Existe coincidencia
+
+Cuando los hashes coinciden, el sistema identifica que ambas solicitudes corresponden a la misma cédula y devuelve una respuesta positiva.
+
+### No existe coincidencia
+
+Si no se encuentra ningún registro compatible, la solicitud finaliza indicando que actualmente no existen coincidencias.
+
+---
+
+# Flujo General del Sistema
+
+```text
+Usuario
+   │
+   ▼
+Formulario (React)
+   │
+   ▼
+API REST
+   │
+   ▼
+Validación
+   │
+   ▼
+Generación HMAC-SHA256
+   │
+   ▼
+SQLite
+   │
+   ├──────────────┐
+   ▼              │
+Comparación Hash  │
+   │              │
+   └──────► Match?
+                │
+        ┌───────┴────────┐
+        ▼                ▼
+  Coincidencia      Sin coincidencia
+        │                │
+        ▼                ▼
+Respuesta JSON      Respuesta JSON
+```
+
+---
+
+# Medidas de Seguridad durante el Flujo
+
+Durante todo el procesamiento se aplican medidas de protección para preservar la privacidad de los usuarios.
+
+Entre ellas:
+
+* Validación de todas las solicitudes antes de acceder a la base de datos.
+* Generación de hashes mediante **HMAC-SHA256**.
+* Uso de una clave secreta almacenada en variables de entorno.
+* Consultas SQL parametrizadas.
+* Manejo controlado de errores.
+* Eliminación automática de registros antiguos mediante tareas programadas.
+
+---
+
+# Resumen del Proceso
+
+1. El usuario envía la información desde el frontend.
+2. El backend valida todos los datos recibidos.
+3. Se genera el hash criptográfico correspondiente.
+4. El sistema consulta la base de datos.
+5. Se compara el hash con los registros existentes.
+6. La API devuelve una respuesta indicando si existe o no una coincidencia.
+
+Este flujo permite realizar el proceso de recuperación de una cédula de forma segura, manteniendo la separación entre la interfaz de usuario, la lógica del servidor y el almacenamiento de la información.
